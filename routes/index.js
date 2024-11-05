@@ -28,7 +28,13 @@ router.get('/read-targets/:job', function(req, res, next) {
 router.get('/jobs', function(req, res, next) {
 	fs.readdir(path.join(__dirname, '../target_dirs'), function(e, dirs) {
         //console.log(dirs);
-        res.json({jobs: dirs});
+        let jobdirs = [];
+        for(let i = 0; i < dirs.length; i++) {
+            if(dirs[i] != 'README.md') {
+                jobdirs.push(dirs[i]);
+            }
+        }
+        res.json({jobs: jobdirs});
     });
 });
 
