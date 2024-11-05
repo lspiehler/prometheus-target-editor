@@ -13,10 +13,10 @@ RUN git clone https://github.com/lspiehler/prometheus-target-editor.git
 
 WORKDIR /var/node/prometheus-target-editor
 
-#RUN npm install
+RUN npm install
 
 RUN mkdocs build -d static
 
-EXPOSE 3000/tcp
+EXPOSE 8000/tcp
 
 CMD ["node", "index.js"]
