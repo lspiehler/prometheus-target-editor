@@ -1,0 +1,20 @@
+{
+  "name": "prometheus-target-editor",
+  "version": "1.0.0",
+  "description": "python3 -m venv .venv/mkdocs source .venv/mkdocs/bin/activate pip3 install mkdocs-material mkdocs new . mkdocs serve -a 0.0.0.0:8000 mkdocs build -d static",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:docs": "mkdocs build -d static",
+    "start:service": "node index.js",
+    "start": "npm run build:docs && npm run start:service"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "js-yaml": "^4.1.0",
+    "tabulator-tables": "^6.3.0"
+  }
+}

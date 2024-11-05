@@ -15,8 +15,8 @@ WORKDIR /var/node/prometheus-target-editor
 
 #RUN npm install
 
-RUN mkdocs new .
+RUN mkdocs build -d static
 
 EXPOSE 3000/tcp
 
-CMD ["/bin/bash"]
+CMD ["node", "index.js"]

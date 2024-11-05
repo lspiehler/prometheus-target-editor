@@ -1,0 +1,9 @@
+site_name: Prometheus Target Editor
+docs_dir: content
+markdown_extensions:
+  - attr_list
+theme:
+  name: material
+  custom_dir: overrides
+nav:
+  - Targets: targets.md

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block htmltitle %}
+  <title>Lorem ipsum dolor sit amet</title>
+{% endblock %}
+
+{% block extrahead %}
+  <link rel="stylesheet" href="/css/tabulator/tabulator_materialize.min.css">
+  <link rel="stylesheet" href="/css/common.css">
+  <script src="/javascripts/common.js"></script>
+  <script src="/js/tabulator/tabulator.min.js" defer></script>
+{% endblock %}
+
+{% block content %}
+  <span>Job: </span><select id="jobs"></select><br /><br />
+  <button type="button" id="addtarget" class="md-button  md-button--primary">
+    Add Target
+  </button>
+  <button type="button" id="savechanges" class="md-button  md-button--primary">
+    Save Changes
+  </button>
+  <div id="example-table"></div>
+{% endblock %}
