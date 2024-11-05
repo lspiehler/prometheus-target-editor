@@ -1,13 +1,13 @@
 FROM docker.io/node:lts-alpine
 LABEL maintainer="Lyas Spiehler"
 
-RUN apk add --no-cache --upgrade bash git python3 py3-pip mkdocs-material
+RUN apk add --no-cache --upgrade bash git python3 py3-pip mkdocs-material py3-regex
 
 RUN mkdir -p /var/node
 
 WORKDIR /var/node
 
-ARG CACHE_DATE=2024-09-16
+ARG CACHE_DATE=2024-11-05
 
 RUN git clone https://github.com/lspiehler/prometheus-target-editor.git
 
