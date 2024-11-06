@@ -1,4 +1,12 @@
-#savechanges{
+#savechanges {
     float: right;
     display: none;
+}
+
+select {
+    width: 150px;
+}
+
+.copy-button {
+    margin-right: 10px;
 }

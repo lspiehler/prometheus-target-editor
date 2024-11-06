@@ -1,0 +1,15 @@
+- targets:
+    - 192.168.1.1
+  labels:
+    name: test
+    site: WJMC
+- targets:
+    - 192.168.1.1
+  labels:
+    name: test
+    site: WJMC5
+- targets:
+    - 192.168.1.3
+  labels:
+    name: test
+    site: WJMC2

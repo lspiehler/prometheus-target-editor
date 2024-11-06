@@ -12,6 +12,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/', express.static(path.join(__dirname, 'static')));
 app.use('/js/tabulator', express.static(path.join(__dirname, 'node_modules/tabulator-tables/dist/js')));
 app.use('/css/tabulator', express.static(path.join(__dirname, 'node_modules/tabulator-tables/dist/css')));
+app.use('/js/select2', express.static(path.join(__dirname, 'node_modules/select2/dist/js')));
+app.use('/css/select2', express.static(path.join(__dirname, 'node_modules/select2/dist/css')));
+app.use('/js/jquery', express.static('./node_modules/jquery/dist'));
 
 // Optional: Handle a default route
 app.get('/', (req, res) => {

@@ -17,9 +17,9 @@ let parseTargets = function(yt) {
     return data;
 }
 
-router.get('/read-targets/:job', function(req, res, next) {
-    console.log(req.params.job);
-    fs.readFile(path.join(__dirname, '../target_dirs/' + req.params.job + '/targets.yml'), function(e, yml) {
+router.get('/targets/:job/:config', function(req, res, next) {
+    //console.log(req.params.job);
+    fs.readFile(path.join(__dirname, '../target_dirs/' + req.params.job + '/' + req.params.config), function(e, yml) {
         let yt = yaml.load(yml);
 	    res.json(parseTargets(yt));
     });
@@ -38,11 +38,17 @@ router.get('/jobs', function(req, res, next) {
     });
 });
 
-router.post('/update-targets/:job', function(req, res, next) {
+router.get('/configs/:job', function(req, res, next) {
+	fs.readdir(path.join(__dirname, '../target_dirs/' + req.params.job), function(e, configs) {
+        res.json({configs: configs});
+    });
+});
+
+router.post('/targets/:job/:config', function(req, res, next) {
     let targetht = {};
     let targets = req.body.targets;
     for(let i = 0; i < targets.length; i++) {
-        console.log(targets[i].target);
+        //console.log(targets[i].target);
         let labels = targets[i].labels.split(',');
         let key = JSON.stringify(labels.sort()).toUpperCase();
         if(targetht.hasOwnProperty(key)) {
@@ -69,9 +75,10 @@ router.post('/update-targets/:job', function(req, res, next) {
         }
         dedupedtargets.push(target);
     }
-    console.log(dedupedtargets);
+    //console.log(req.params.job + '/' + req.params.config);
+    //console.log(dedupedtargets);
     let yt = yaml.dump(dedupedtargets);
-    fs.writeFile(path.join(__dirname, '../target_dirs/' + req.params.job + '/targets.yml'), yt, function(e) {
+    fs.writeFile(path.join(__dirname, '../target_dirs/' + req.params.job + '/' + req.params.config), yt, function(e) {
 	    res.json(dedupedtargets);
     });
 });

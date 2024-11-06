@@ -7,7 +7,7 @@ var printIcon = function(cell, formatterParams, onRendered){ //plain text value
 
     let copybutton = document.createElement('button');
     copybutton.innerHTML = 'Copy';
-    copybutton.className = 'md-button md-button--primary';
+    copybutton.className = 'md-button md-button--primary copy-button';
     copybutton.addEventListener('click', function(e) {
         let celldata = cell.getData();
         //console.log(celldata);
@@ -28,7 +28,7 @@ var printIcon = function(cell, formatterParams, onRendered){ //plain text value
     return buttondiv;
 };
 
-var initTable = function(job) {
+var loadTable = function(jobselect, configselect) {
     var table = new Tabulator("#example-table", {
         columns:[
             {
@@ -53,7 +53,7 @@ var initTable = function(job) {
     });
 
     table.on("tableBuilt", function(){
-        table.setData("/read-targets/" + job);
+        table.setData("/targets/" + jobselect.select2('data')[0].id + '/' + configselect.select2('data')[0].id);
     });
 
     table.on("dataChanged", function(data){
@@ -68,9 +68,9 @@ var initTable = function(job) {
     document.getElementById('savechanges').addEventListener('click', function(e) {
         let data = table.getData();
         console.log({targets: data});
-        let jobselect = document.getElementById('jobs');
+        //console.log(jobselect.select2('data')[0].id);
 
-        fetch("/update-targets/" + jobselect.options[jobselect.selectedIndex].value, {
+        fetch("/targets/" + jobselect.select2('data')[0].id + '/' +configselect.select2('data')[0].id, {
     
             // Adding method type
             method: "POST",
@@ -88,40 +88,79 @@ var initTable = function(job) {
         .then(response => response.json())
         
         // Displaying results to console
-        .then(json => console.log(json));
+        .then(json => {
+            console.log(json)
+            document.getElementById('savechanges').style.display = 'none';
+        });
+    });
+
+    return table;
+}
+
+var loadConfigs = function(job, callback) {
+    let configselect = $('.configselect').select2();
+
+    configselect.empty();
+
+    fetch("/configs/" + job, {
+        method: "GET", 
+    })
+    .then(response => response.json())
+    .then(json => {
+        console.log(json);
+        for(let i = 0; i < json.configs.length; i++) {
+            // let option = document.createElement('option');
+            // option.innerText = json.jobs[i];
+            // option.value = json.jobs[i];
+            // jobselect.add(option);
+            let newOption = new Option(json.configs[i], json.configs[i], false, false);
+            configselect.append(newOption);
+        }
+        configselect.trigger('change');
+        callback(false, configselect);
     });
 }
 
-var loadJobs = function() {
+var loadJobs = function(callback) {
+    let jobselect = $('.jobselect').select2();
+
     fetch("/jobs", {
-    
-        // Adding method type
-        method: "GET",
-        
+        method: "GET", 
     })
-    
-    // Converting to JSON
     .then(response => response.json())
-    
-    // Displaying results to console
     .then(json => {
         console.log(json);
-        let jobselect = document.getElementById('jobs');
         for(let i = 0; i < json.jobs.length; i++) {
-            let option = document.createElement('option');
-            option.innerText = json.jobs[i];
-            option.value = json.jobs[i];
-            jobselect.add(option);
+            // let option = document.createElement('option');
+            // option.innerText = json.jobs[i];
+            // option.value = json.jobs[i];
+            // jobselect.add(option);
+            let newOption = new Option(json.jobs[i], json.jobs[i], false, false);
+            jobselect.append(newOption);
         }
+        jobselect.trigger('change');
+        callback(false, jobselect);
 
-        jobselect.addEventListener('change', function(e) {
-            alert('reload table');
-        });
-
-        initTable(jobselect.options[jobselect.selectedIndex].value);
+        // jobselect.addEventListener('change', function(e) {
+        //     table.setData("/read-targets/" + jobselect.options[jobselect.selectedIndex].value);
+        // });
     })
 }
 
 window.onload = function() {
-    loadJobs();
+    loadJobs(function(err, jobselect) {
+        loadConfigs(jobselect.select2('data')[0].id, function(e, configselect) {
+            let table = loadTable(jobselect, configselect);
+
+            jobselect.on('change', function(e) {
+                loadConfigs(jobselect.select2('data')[0].id, function(e, configselect) {
+                    table.setData("/targets/" + jobselect.select2('data')[0].id + '/' + configselect.select2('data')[0].id);
+                });
+            });
+
+            configselect.on('change', function(e) {
+                table.setData("/targets/" + jobselect.select2('data')[0].id + '/' + configselect.select2('data')[0].id);
+            });
+        });
+    });
 }

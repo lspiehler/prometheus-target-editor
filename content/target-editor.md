@@ -1,6 +1,6 @@
 ---
 title: My Test title
-template: targets.html
+template: target-editor.html
 hide:
   - toc
   #- navigation
