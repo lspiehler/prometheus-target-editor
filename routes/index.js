@@ -64,6 +64,12 @@ router.post('/targets/:job/:config', function(req, res, next) {
                 targetht[key].labels[parselabel[0]] = parselabel[1];
                 //console.log(label);
             }
+            if(targetht[key].labels.hasOwnProperty('owner') == false) {
+                res.json({
+                    error: 'All targets must have an owner label!'
+                });
+                return;
+            }
         }
     }
     let dedupedtargets = [];
@@ -79,7 +85,10 @@ router.post('/targets/:job/:config', function(req, res, next) {
     //console.log(dedupedtargets);
     let yt = yaml.dump(dedupedtargets);
     fs.writeFile(path.join(__dirname, '../target_dirs/' + req.params.job + '/' + req.params.config), yt, function(e) {
-	    res.json(dedupedtargets);
+	    res.json({
+            error: false,
+            targets: dedupedtargets
+        });
     });
 });
 

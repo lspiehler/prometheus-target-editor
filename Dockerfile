@@ -7,7 +7,7 @@ RUN mkdir -p /var/node
 
 WORKDIR /var/node
 
-ARG CACHE_DATE=2024-11-06v1
+ARG CACHE_DATE=2024-11-06v3
 
 RUN git clone https://github.com/lspiehler/prometheus-target-editor.git
 

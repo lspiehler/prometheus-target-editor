@@ -90,7 +90,11 @@ var loadTable = function(jobselect, configselect) {
         // Displaying results to console
         .then(json => {
             console.log(json)
-            document.getElementById('savechanges').style.display = 'none';
+            if(json.error == false) {
+                document.getElementById('savechanges').style.display = 'none';
+            } else {
+                alert(json.error);
+            }
         });
     });
 
